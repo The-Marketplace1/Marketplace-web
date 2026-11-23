@@ -3,22 +3,21 @@ import styles from "@/components/marketplace.module.css";
 
 export function MarketplaceEarthMark({ large = false }: { large?: boolean }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className={large ? styles.heroEarth : styles.brandEarth}>
-      <circle cx="12" cy="12" r="9.1" stroke="currentColor" strokeWidth={large ? ".1" : "1.45"} />
-      <path d="M3.2 12h17.6M9 3.5C6.4 5.7 5 8.6 5 12s1.4 6.3 4 8.5m6-17C17.6 5.7 19 8.6 19 12s-1.4 6.3-4 8.5" stroke="currentColor" strokeWidth={large ? ".09" : "1.1"} strokeLinecap="round" />
-      <path d="M5 16.6c2.1-1.8 4.4-3 7.1-3.8 2.1-.6 4.2-1.7 6.7-3.7" stroke="var(--teal)" strokeWidth={large ? ".14" : "1.45"} strokeLinecap="round" />
-      <circle cx="5" cy="16.6" r={large ? ".2" : ".9"} fill="var(--teal)" />
-      <circle cx="18.8" cy="9.1" r={large ? ".2" : ".9"} fill="var(--teal)" />
+    <svg aria-hidden="true" viewBox="0 0 64 64" fill="none" className={large ? styles.heroEarth : styles.brandEarth} focusable="false">
+      <circle cx="32" cy="32" r="22" stroke="currentColor" strokeWidth="2.5" />
+      <path d="M10 32h44M32 10c-7 6-10 13-10 22s3 16 10 22m0-44c7 6 10 13 10 22s-3 16-10 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M16 43c7-6 14-9 22-12 5-2 9-5 13-9" stroke="var(--teal)" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="16" cy="43" r="3" fill="var(--teal)" />
+      <circle cx="51" cy="22" r="3" fill="var(--teal)" />
     </svg>
   );
 }
 
 export function MarketplaceBrand() {
   return (
-    <Link className={styles.brand} href="/" aria-label="Marketplace home">
+    <Link className={styles.brand} href="/" aria-label="The Marketplace home">
       <span className={styles.brandMark}><MarketplaceEarthMark /></span>
-      <span>marketplace</span>
+      <span>The Marketplace</span>
     </Link>
   );
 }
-

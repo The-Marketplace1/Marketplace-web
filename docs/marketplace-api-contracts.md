@@ -1,74 +1,25 @@
 # Marketplace API and Gateway contract overview
 
-This repository intentionally does not make live Marketplace requests. The service contracts exist as interface boundaries with explicit unavailable-state checks so the UI stays honest until an approved Gateway and contract are in place.
+## Current integration status
 
-## Gateway boundary
+Marketplace-web has typed service ports and a fail-closed Gateway registration boundary. It has no verified production adapter, reachable configured Gateway, or live connected Marketplace API. `MARKETPLACE_API_GATEWAY_URL` is server-only; its presence alone proves neither reachability nor implementation. Keep the unavailable UI states until real API responses are tested.
 
-The contract boundary is defined in:
+## Verified related-repository evidence
 
-- `services/gateway/errors.ts`
-- `services/gateway/status.ts`
-- `services/gateway/adapter.ts`
-- `services/gateway/config.ts`
+- `api-gateway` registers `/api/auth/*`, dedicated payment/realtime/notification routers, and a catch-all proxy to `BACKEND_API_URL`. The route registry does not prove customer/profile endpoints exist.
+- Gateway configuration requires auth/backend/payment/realtime/notification service URLs, JWT/Redis settings and allowed origins.
+- `auth-service` source includes register, login, refresh, email verification, password reset, logout, current-user lookup, sessions and 2FA routes. Gateway path mapping and deployed reachability must be verified before web use.
+- `shared-types` includes `ProfessionalClient`, professional DTOs/schemas and a generic `UserClient`. The inspected auth-service user routes are admin-only; they do not establish a customer self-service profile API. No customer-specific profile DTO/client was found in the inspected SDK paths.
+- `backend-api` is private and its contents were inaccessible in the inspection. Customer, catalog, booking and service API routes remain unverified.
 
-The root contract states:
+This repository evidence is not a claim that those services are deployed or operational.
 
-- no approved API Gateway adapter is configured
-- no request is sent
-- each domain is tracked as a separate integration
+## Adapter requirements
 
-## Integration domains
+Obtain an approved versioned Gateway OpenAPI contract or equivalent. For every operation confirm public path/method, request/response schema, auth/role requirements, error envelope, pagination, rate limit, idempotency, timeout/retry and service owner. Map wire DTOs into UI view types. Do not guess paths, call internal services directly from browsers, or treat credentials as proof of health.
 
-The repository defines the following domains in `MarketplaceIntegration`:
+## Integration count
 
-1. `api-gateway`
-2. `authentication`
-3. `customers`
-4. `professionals`
-5. `services`
-6. `bookings`
-7. `payments`
-8. `notifications`
-9. `realtime`
-10. `communication`
-11. `reviews`
-12. `storage`
-13. `location`
-14. `security`
-15. `analytics`
-16. `monitoring`
+The web code tracks 16 integration entries: Gateway plus 15 domains (authentication, customers, professionals, services, bookings, payments, notifications, realtime, communication, reviews, storage, location, security, analytics, monitoring). This is a domain count, not an endpoint count. No live integration is approved without observed end-to-end evidence.
 
-## Domain contracts currently represented
-
-### Authentication
-- `services/types.ts` defines login, signup, password recovery, and email verification methods.
-
-### Customer and professional data
-- customer and professional service ports are defined as app-facing interfaces only; they must be mapped to approved Marketplace shared types before live integration.
-
-### Catalog / services
-- discovery and service detail operations are declared but explicitly unavailable until the backend contract exists.
-
-### Bookings and payments
-- booking lifecycle and payment operations are represented as ports; the UI remains disabled until the backend is available.
-
-### Communication, reviews, and realtime
-- message and notification flows are represented as typed ports and are intentionally not connected.
-
-### Storage and location
-- file/media uploads and address lookup are represented as adapter boundaries with explicit unavailable errors.
-
-### Security, analytics, and monitoring
-- monitoring and analytics capabilities are defined, but they are not connected to a live backend.
-
-## Important rule
-
-The app uses a fail-closed pattern:
-
-- if the Gateway is not registered, `getMarketplaceGatewayAdapter()` throws `IntegrationUnavailableError`
-- if a location provider is absent, a location-specific unavailable error is thrown
-- all UI messages explain the unavailability instead of claiming connected data
-
-## Recommended next step
-
-Once the Marketplace backend contract is approved, each domain should be implemented via a single Gateway adapter, then registered in the app and surfaced through the existing integration status UI.
+See [`remediation-register.md`](remediation-register.md) for status and exact dependencies across all 20 audit sections.

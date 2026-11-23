@@ -1,66 +1,29 @@
 # Marketplace-web
 
-This repository is the root Next.js application for the Marketplace web experience. It is the authoritative app for the product UI, while `my-next-app/` is a separate starter scaffold and should not be treated as the production app unless the team explicitly adopts it.
+The root Next.js application is the Marketplace web product. `my-next-app/` is an independent starter scaffold and is not the authoritative storefront.
 
-## Repository purpose
+The current application provides Marketplace UI and explicit disconnected states. It must not be treated as a live marketplace until Gateway APIs, credentials, legal content, deployment configuration, and end-to-end journeys are verified.
 
-`Marketplace-web` is a marketplace frontend preview for customers and professionals. It intentionally avoids claiming live data or real account actions while the approved Marketplace API Gateway and service contracts are not in place.
-
-## Authoritative app
-
-- Root app: `app/`, `components/`, `features/`, `services/`, `types/`, `validation/`
-- Secondary starter scaffold: `my-next-app/`
-
-The root app is the active product code. `my-next-app/` is a generated Next.js starter and is not the live storefront implementation.
-
-## Current API integration status
-
-The repo explicitly tracks the integration state through `services/gateway/status.ts` and prevents requests from being sent until a Gateway adapter is registered.
-
-The web app currently has these integration domains:
-
-1. api-gateway
-2. authentication
-3. customers
-4. professionals
-5. services
-6. bookings
-7. payments
-8. notifications
-9. realtime
-10. communication
-11. reviews
-12. storage
-13. location
-14. security
-15. analytics
-16. monitoring
-
-Status: `api-gateway` is `not-configured`; all service domains are `waiting-for-contract`.
-
-## Route alignment
-
-The app exposes public routes as:
-
-- `/`
-- `/explore`
-- `/login`
-- `/forgot-password`
-- `/verify-email`
-- `/signup`
-- `/signup/customer`
-- `/signup/professional`
-
-The path aliases under `app/authentication/*` still exist, but the canonical public routes are the top-level aliases above so the Playwright tests and production navigation align.
-
-## Development
+## Develop
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-## Notes
+## Checks
 
-- `.env.example` defines the server-side `MARKETPLACE_API_GATEWAY_URL` and public `NEXT_PUBLIC_SITE_URL` placeholders.
-- No real API calls are made unless an approved adapter is registered.
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:e2e
+pnpm build
+```
+
+## Configuration
+
+- `MARKETPLACE_API_GATEWAY_URL`: server-only Gateway origin. Its presence does not prove that the Gateway is reachable or its contracts are available.
+- `NEXT_PUBLIC_SITE_URL`: canonical origin for metadata, robots and sitemap. Set only to a domain controlled by the deployment owner. `https://Marketplace.com` is intended, not verified as registered or deployed.
+
+See [`docs/remediation-register.md`](docs/remediation-register.md) and [`docs/marketplace-api-contracts.md`](docs/marketplace-api-contracts.md) for repository evidence, current integration state, blockers and verification results. No production deployment or real provider/payment integration is claimed.
